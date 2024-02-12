@@ -11,7 +11,18 @@ public class AlphanumericEncodingMode implements EncodingMode {
 
   @Override
   public String getMode(String data) throws EncodingDeterminationException {
-    // TODO Auto-generated method stub
-    return modeValue;
+    if (data == null)
+      throw new EncodingDeterminationException();
+    if (isAlphanumeric(data)) {
+      return modeValue;
+    }
+    throw new EncodingDeterminationException();
+  }
+
+  private boolean isAlphanumeric(String data) {
+    String characterSetRegex = "^[A-Z0-9 $%*+-./:]*$";
+    if (data.matches(characterSetRegex))
+      return true;
+    return false;
   }
 }

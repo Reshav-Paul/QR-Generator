@@ -11,7 +11,18 @@ public class NumericEncodingMode implements EncodingMode {
 
   @Override
   public String getMode(String data) throws EncodingDeterminationException {
-    // TODO Auto-generated method stub
-    return modeValue;
+    if (data == null || data.length() == 0)
+      throw new EncodingDeterminationException();
+    if (isNumeric(data)) {
+      return modeValue;
+    }
+    throw new EncodingDeterminationException();
+  }
+
+  private boolean isNumeric(String data) {
+    String characterSetRegex = "^[0-9]*$";
+    if (data.matches(characterSetRegex))
+      return true;
+    return false;
   }
 }
