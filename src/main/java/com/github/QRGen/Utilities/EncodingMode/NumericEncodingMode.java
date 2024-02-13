@@ -21,8 +21,6 @@ public class NumericEncodingMode implements EncodingMode {
 
   private boolean isNumeric(String data) {
     String characterSetRegex = "^[0-9]*$";
-    if (data.matches(characterSetRegex))
-      return true;
-    return false;
+    return data.matches(characterSetRegex);
   }
 }

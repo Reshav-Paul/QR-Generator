@@ -21,8 +21,6 @@ public class AlphanumericEncodingMode implements EncodingMode {
 
   private boolean isAlphanumeric(String data) {
     String characterSetRegex = "^[A-Z0-9 $%*+-./:]*$";
-    if (data.matches(characterSetRegex))
-      return true;
-    return false;
+    return data.matches(characterSetRegex);
   }
 }
