@@ -4,22 +4,22 @@ import com.github.QRGen.Utilities.CharacterCountIndicator.Interfaces.CharacterCo
 import com.github.QRGen.Utilities.QRCodeVersion.Interfaces.QRCodeVersion;
 
 public class ByteCharacterCountIndicator implements CharacterCountIndicator {
-    private int characterCount;
-    private QRCodeVersion qrCodeVersion;
+    private int _characterCount;
+    private QRCodeVersion _qrCodeVersion;
 
     public ByteCharacterCountIndicator(int characterCount, QRCodeVersion qrCodeVersion) {
-        this.characterCount = characterCount;
-        this.qrCodeVersion = qrCodeVersion;
+        this._characterCount = characterCount;
+        this._qrCodeVersion = qrCodeVersion;
     }
 
     @Override
     public int getCharacterCount() {
-        return characterCount;
+        return _characterCount;
     }
 
     @Override
     public QRCodeVersion getQrCodeVersion() {
-        return qrCodeVersion;
+        return _qrCodeVersion;
     }
 
     @Override
