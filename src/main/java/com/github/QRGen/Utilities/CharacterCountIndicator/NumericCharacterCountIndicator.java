@@ -1,31 +1,37 @@
 package com.github.QRGen.Utilities.CharacterCountIndicator;
 
 import com.github.QRGen.Utilities.CharacterCountIndicator.Interfaces.CharacterCountIndicator;
+import com.github.QRGen.Utilities.QRCodeVersion.QRCodeVersionException;
 import com.github.QRGen.Utilities.QRCodeVersion.Interfaces.QRCodeVersion;
 
 public class NumericCharacterCountIndicator implements CharacterCountIndicator {
-    private int characterCount;
-    private QRCodeVersion qrCodeVersion;
+    private int _characterCount;
+    private QRCodeVersion _qrCodeVersion;
+    private CCILength _cciLength;
 
     public NumericCharacterCountIndicator(int characterCount, QRCodeVersion qrCodeVersion) {
-        this.characterCount = characterCount;
-        this.qrCodeVersion = qrCodeVersion;
+        this._characterCount = characterCount;
+        this._qrCodeVersion = qrCodeVersion;
+        this._cciLength = new CCILength(new int[] { 3, 4, 5, 6, 10, 12, 14 });
     }
 
     @Override
     public int getCharacterCount() {
-        return characterCount;
+        return _characterCount;
     }
 
     @Override
     public QRCodeVersion getQrCodeVersion() {
-        return qrCodeVersion;
+        return _qrCodeVersion;
     }
 
     @Override
-    public String getCCI() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCCI'");
+    public String getCCI() throws CharacterCountIndicatorException, QRCodeVersionException {
+        String cciBinary = Integer.toBinaryString(_characterCount);
+
+        int desiredLength = _cciLength.getCCIBitsLength(_qrCodeVersion.getVersion());
+        String padding = "0".repeat(desiredLength - cciBinary.length());
+        return padding + cciBinary;
     }
 
 }
