@@ -1,27 +1,34 @@
 package com.github.QRGen.Encoder;
 
-import java.util.List;
-
 import com.github.QRGen.Encoder.Interfaces.Encoder;
+import com.github.QRGen.Utilities.CharacterCountIndicator.NumericCharacterCountIndicator;
+import com.github.QRGen.Utilities.CharacterCountIndicator.Interfaces.CharacterCountIndicator;
+import com.github.QRGen.Utilities.EncodingMode.NumericEncodingMode;
+import com.github.QRGen.Utilities.EncodingMode.Interfaces.EncodingMode;
+import com.github.QRGen.Utilities.ErrorCorrection.ErrorCorrectionLevel;
+import com.github.QRGen.Utilities.QRCodeVersion.NumericQRCodeVersion;
+import com.github.QRGen.Utilities.QRCodeVersion.Interfaces.QRCodeVersion;
 
 public class NumericEncoder implements Encoder {
+  private String _encodingModeValue = "0001";
+  private char _errorCorrectionLevel;
 
-    private final int groupSize = 3;
-    private final int[] desiredLengths = new int[] { 4, 7, 10 }; // 2^10 = 1024 which accomodates max 999
+  public NumericEncoder(char errorCorrectionLevel) {
+    this._errorCorrectionLevel = errorCorrectionLevel;
+  }
 
-    @Override
-    public String encode(String data) throws EncoderException {
-        if (data == null || data.isEmpty()) {
-            throw new EncoderException("Non null data expected");
-        }
-        StringBuilder binaryDataBuilder = new StringBuilder();
-        List<String> groups = EncoderUtility.getGroups(data, groupSize);
-        for (String group : groups) {
-            String binaryData = Integer.toBinaryString(Integer.parseInt(group));
-            String paddedData = "0".repeat(desiredLengths[group.length() - 1] - binaryData.length());
-            binaryDataBuilder.append(paddedData);
-            binaryDataBuilder.append(binaryData);
-        }
-        return binaryDataBuilder.toString();
-    }
+  @Override
+  public String encode(String data) throws EncoderException {
+
+    Encoder dataBitEncoder = new NumericDataBitEncoder();
+    QRCodeVersion qrCodeVersion = new NumericQRCodeVersion(
+        data.length(),
+        new ErrorCorrectionLevel(this._errorCorrectionLevel));
+    CharacterCountIndicator cciIndicator = new NumericCharacterCountIndicator(data.length(), qrCodeVersion);
+    EncodingMode encodingMode = new NumericEncodingMode(_encodingModeValue);
+
+    QREncoder encoder = new QREncoder(dataBitEncoder, qrCodeVersion, cciIndicator, encodingMode);
+    return encoder.encode(data);
+  }
+
 }
